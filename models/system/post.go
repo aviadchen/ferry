@@ -82,9 +82,9 @@ func (e *Post) GetList() ([]Post, error) {
 	return doc, nil
 }
 
-func (e *Post) GetPage(pageSize int, pageIndex int) ([]Post, int, error) {
+func (e *Post) GetPage(pageSize int, pageIndex int) ([]Post, int64, error) {
 	var (
-		count int
+		count int64
 		doc   []Post
 	)
 

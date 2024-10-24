@@ -4,11 +4,16 @@ import (
 	"ferry/models/process"
 	"ferry/models/system"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 func AutoMigrate(db *gorm.DB) error {
-	db.SingularTable(true)
+	// Replace db.SingularTable(true) with:
+	db.NamingStrategy = schema.NamingStrategy{
+		SingularTable: true,
+	}
+
 	return db.AutoMigrate(
 		// 系统管理
 		new(system.CasbinRule),
@@ -31,5 +36,5 @@ func AutoMigrate(db *gorm.DB) error {
 		new(process.Info),
 		new(process.History),
 		new(process.CirculationHistory),
-	).Error
+	)
 }

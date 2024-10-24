@@ -58,14 +58,14 @@ func (s *Statistics) DateRangeStatistics() (statisticsData map[string][]interfac
 			sqlDataValue += fmt.Sprintf("SELECT date_sub(date_format( '%s', '%%Y%%m%%d'), INTERVAL 0 DAY ) AS click_date UNION ALL", endTime)
 		} else if i == TimeDifference-1 {
 			sqlDataValue += fmt.Sprintf(` SELECT date_sub(date_format( '%s', '%%Y%%m%%d'), INTERVAL %d DAY ) AS click_date UNION ALL`, endTime, i)
-			sqlDataValue += fmt.Sprintf(` SELECT date_sub(date_format( '%s', '%%Y%%m%%d'), INTERVAL %d DAY ) AS click_date`, endTime, i + 1)
+			sqlDataValue += fmt.Sprintf(` SELECT date_sub(date_format( '%s', '%%Y%%m%%d'), INTERVAL %d DAY ) AS click_date`, endTime, i+1)
 		} else {
 			sqlDataValue += fmt.Sprintf(` SELECT date_sub(date_format( '%s', '%%Y%%m%%d'), INTERVAL %d DAY ) AS click_date UNION ALL`, endTime, i)
 		}
 	}
 
 	if TimeDifference == 1 {
-		sqlDataValue +=  fmt.Sprintf(" SELECT date_sub(date_format( '%s', '%%Y%%m%%d'), INTERVAL 1 DAY ) AS click_date",endTime)
+		sqlDataValue += fmt.Sprintf(" SELECT date_sub(date_format( '%s', '%%Y%%m%%d'), INTERVAL 1 DAY ) AS click_date", endTime)
 	}
 
 	sqlValue = fmt.Sprintf(`SELECT
@@ -176,12 +176,12 @@ func (s *Statistics) SubmitRanking() (submitRankingData map[string][]interface{}
 }
 
 // 查询工单数量统计
-func (s *Statistics) WorkOrderCount(c *gin.Context) (countList map[string]int, err error) {
+func (s *Statistics) WorkOrderCount(c *gin.Context) (countList map[string]int64, err error) {
 	var (
 		w      *WorkOrder
 		result interface{}
 	)
-	countList = make(map[string]int)
+	countList = make(map[string]int64)
 	for _, i := range []int{1, 2, 3, 4} {
 		w = NewWorkOrder(i, c)
 		if i != 1 {

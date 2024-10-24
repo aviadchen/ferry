@@ -10,7 +10,7 @@ import (
 	"math"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type Param struct {
@@ -20,7 +20,7 @@ type Param struct {
 }
 
 type Paginator struct {
-	TotalCount int         `json:"total_count"`
+	TotalCount int64       `json:"total_count"`
 	TotalPage  int         `json:"total_page"`
 	Data       interface{} `json:"data"`
 	PerPage    int         `json:"per_page"`
@@ -38,7 +38,7 @@ func Paging(p *Param, result interface{}, args ...interface{}) (*Paginator, erro
 	var (
 		param     ListRequest
 		paginator Paginator
-		count     int
+		count     int64
 		offset    int
 		tableName string
 	)
@@ -109,7 +109,7 @@ func Paging(p *Param, result interface{}, args ...interface{}) (*Paginator, erro
 	return &paginator, nil
 }
 
-func countRecords(db *gorm.DB, anyType interface{}, done chan bool, count *int) {
+func countRecords(db *gorm.DB, anyType interface{}, done chan bool, count *int64) {
 	db.Model(anyType).Count(count)
 	done <- true
 }

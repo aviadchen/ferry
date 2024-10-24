@@ -55,7 +55,7 @@ func CreateProcess(c *gin.Context) {
 	var (
 		err          error
 		processValue process2.Info
-		processCount int
+		processCount int64
 	)
 
 	err = c.ShouldBind(&processValue)

@@ -20,7 +20,7 @@ func CreateClassify(c *gin.Context) {
 	var (
 		err           error
 		classifyValue process2.Classify
-		classifyCount int
+		classifyCount int64
 	)
 
 	err = c.ShouldBind(&classifyValue)

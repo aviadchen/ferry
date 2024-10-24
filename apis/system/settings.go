@@ -40,7 +40,7 @@ func SetSettingsInfo(c *gin.Context) {
 	var (
 		err           error
 		settingsInfo  system.Settings
-		settingsCount int
+		settingsCount int64
 	)
 
 	err = c.ShouldBind(&settingsInfo)

@@ -17,7 +17,7 @@ import (
 func InitData(c *gin.Context) {
 	var (
 		err       error
-		count     map[string]int // 工单数量统计
+		count     map[string]int64 // 工单数量统计
 		ranks     []service.Ranks
 		submit    map[string][]interface{}
 		startTime string

@@ -7,10 +7,13 @@ import (
 	"ferry/tools/config"
 	"strconv"
 
+	glogger "gorm.io/gorm/logger"
+
 	"github.com/spf13/viper"
 
 	_ "github.com/go-sql-driver/mysql" //加载mysql
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var (
@@ -42,20 +45,33 @@ func (e *Mysql) Setup() {
 	}
 
 	// 是否开启详细日志记录
-	orm.Eloquent.LogMode(viper.GetBool("settings.gorm.logMode"))
+	// orm.Eloquent.LogMode(viper.GetBool("settings.gorm.logMode"))
+	// This decision needs an approval from the engineer - it might be that they want to change the logger type
+
+	if viper.GetBool("settings.gorm.logMode") {
+		orm.Eloquent.Logger = glogger.Default.LogMode(glogger.Info)
+	} else {
+		orm.Eloquent.Logger = glogger.Default.LogMode(glogger.Silent)
+	}
+
+	eldb, err := orm.Eloquent.DB()
+	if err != nil {
+		logger.Fatalf("database error %v", err)
+	}
 
 	// 设置最大打开连接数
-	orm.Eloquent.DB().SetMaxOpenConns(viper.GetInt("settings.gorm.maxOpenConn"))
+	eldb.SetMaxOpenConns(viper.GetInt("settings.gorm.maxOpenConn"))
 
 	// 用于设置闲置的连接数.设置闲置的连接数则当开启的一个连接使用完成后可以放在池里等候下一次使用
-	orm.Eloquent.DB().SetMaxIdleConns(viper.GetInt("settings.gorm.maxIdleConn"))
+	eldb.SetMaxIdleConns(viper.GetInt("settings.gorm.maxIdleConn"))
 }
 
 type Mysql struct {
 }
 
 func (e *Mysql) Open(dbType string, conn string) (db *gorm.DB, err error) {
-	return gorm.Open(dbType, conn)
+	dialector := mysql.Open(conn)
+	return gorm.Open(dialector, &gorm.Config{})
 }
 
 func (e *Mysql) GetConnect() string {

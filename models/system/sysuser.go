@@ -197,10 +197,10 @@ func (e *SysUser) GetList() (SysUserView []SysUserView, err error) {
 	return
 }
 
-func (e *SysUser) GetPage(pageSize int, pageIndex int) ([]SysUserPage, int, error) {
+func (e *SysUser) GetPage(pageSize int, pageIndex int) ([]SysUserPage, int64, error) {
 	var (
 		doc   []SysUserPage
-		count int
+		count int64
 	)
 	table := orm.Eloquent.Select("sys_user.*,sys_dept.dept_name").Table(e.TableName())
 	table = table.Joins("left join sys_dept on sys_dept.dept_id = sys_user.dept_id")
@@ -232,7 +232,7 @@ func (e *SysUser) GetPage(pageSize int, pageIndex int) ([]SysUserPage, int, erro
 	return doc, count, nil
 }
 
-//加密
+// 加密
 func (e *SysUser) Encrypt() (err error) {
 	if e.Password == "" {
 		return
@@ -247,14 +247,14 @@ func (e *SysUser) Encrypt() (err error) {
 	}
 }
 
-//添加
+// 添加
 func (e SysUser) Insert() (id int, err error) {
 	if err = e.Encrypt(); err != nil {
 		return
 	}
 
 	// check 用户名
-	var count int
+	var count int64
 	orm.Eloquent.Table(e.TableName()).Where("username = ? and `delete_time` IS NULL", e.Username).Count(&count)
 	if count > 0 {
 		err = errors.New("账户已存在！")
@@ -269,7 +269,7 @@ func (e SysUser) Insert() (id int, err error) {
 	return
 }
 
-//修改
+// 修改
 func (e *SysUser) Update(id int) (update SysUser, err error) {
 	if e.Password != "" {
 		if err = e.Encrypt(); err != nil {
