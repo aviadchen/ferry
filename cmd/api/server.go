@@ -72,9 +72,11 @@ func run() error {
 	r := router.InitRouter()
 
 	defer func() {
-		err := orm.Eloquent.Close()
-		if err != nil {
-			logger.Error(err)
+		if db, err := orm.Eloquent.DB(); err == nil {
+			err = db.Close()
+			if err != nil {
+				logger.Error(err)
+			}
 		}
 	}()
 

@@ -29,7 +29,7 @@ func OK(c *gin.Context, data interface{}, msg string) {
 }
 
 // 分页数据处理
-func PageOK(c *gin.Context, result interface{}, count int, pageIndex int, pageSize int, msg string) {
+func PageOK(c *gin.Context, result interface{}, count int64, pageIndex int, pageSize int, msg string) {
 	var res PageResponse
 	res.Data.List = result
 	res.Data.Count = count

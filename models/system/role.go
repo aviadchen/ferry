@@ -35,10 +35,10 @@ type MenuIdList struct {
 	MenuId int `json:"menuId"`
 }
 
-func (e *SysRole) GetPage(pageSize int, pageIndex int) ([]SysRole, int, error) {
+func (e *SysRole) GetPage(pageSize int, pageIndex int) ([]SysRole, int64, error) {
 	var (
 		doc   []SysRole
-		count int
+		count int64
 	)
 
 	table := orm.Eloquent.Select("*").Table("sys_role")
@@ -107,7 +107,7 @@ func (role *SysRole) GetRoleMeunId() ([]int, error) {
 }
 
 func (role *SysRole) Insert() (id int, err error) {
-	i := 0
+	i := int64(0)
 	orm.Eloquent.Table("sys_role").Where("(role_name = ? or role_key = ?) and `delete_time` IS NULL", role.RoleName, role.RoleKey).Count(&i)
 	if i > 0 {
 		return 0, errors.New("角色名称或者角色标识已经存在！")
@@ -140,7 +140,7 @@ func (role *SysRole) GetRoleDeptId() ([]int, error) {
 	return deptIds, nil
 }
 
-//修改
+// 修改
 func (role *SysRole) Update(id int) (update SysRole, err error) {
 	if err = orm.Eloquent.Table("sys_role").First(&update, id).Error; err != nil {
 		return
@@ -162,7 +162,7 @@ func (role *SysRole) Update(id int) (update SysRole, err error) {
 	return
 }
 
-//批量删除
+// 批量删除
 func (e *SysRole) BatchDelete(id []int) (Result bool, err error) {
 	if err = orm.Eloquent.Table("sys_role").Where("role_id in (?)", id).Delete(&SysRole{}).Error; err != nil {
 		return

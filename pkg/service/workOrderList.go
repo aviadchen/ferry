@@ -151,7 +151,7 @@ func (w *WorkOrder) WorkOrderList() (result interface{}, err error) {
 		principals        string
 		StateList         []map[string]interface{}
 		workOrderInfoList []workOrderInfo
-		minusTotal        int
+		minusTotal        int64
 	)
 
 	result, err = w.PureWorkOrderList()

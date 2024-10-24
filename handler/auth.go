@@ -64,7 +64,7 @@ func Authenticator(c *gin.Context) (interface{}, error) {
 		loginVal      system.Login
 		loginLog      system.LoginLog
 		roleValue     system.SysRole
-		authUserCount int
+		authUserCount int64
 		addUserInfo   system.SysUser
 		ldapUserInfo  *ldap.Entry
 		isVerifyCode  interface{}

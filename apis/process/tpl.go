@@ -51,7 +51,7 @@ func CreateTemplate(c *gin.Context) {
 	var (
 		err           error
 		templateValue process.TplInfo
-		templateCount int
+		templateCount int64
 	)
 
 	err = c.ShouldBind(&templateValue)
